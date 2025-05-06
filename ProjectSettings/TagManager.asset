@@ -9,6 +9,8 @@ TagManager:
   - BackGround
   - Rubble
   - Cube
+  - PetTaker
+  - ColorStore
   layers:
   - Default
   - TransparentFX

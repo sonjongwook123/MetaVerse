@@ -25,10 +25,16 @@ public class PlayerMovement : MonoBehaviour
 
         // 이동 방향 벡터를 생성합니다.
         Vector3 movement = new Vector3(horizontalInput, verticalInput, 0f).normalized;
-
+        float moveDistance = 0;
         // 매 프레임 이동할 거리를 계산합니다.
-        float moveDistance = moveSpeed * Time.deltaTime;
-
+        if (GetComponent<Player>().isPet == true)
+        {
+            moveDistance = moveSpeed * 2 * Time.deltaTime;
+        }
+        else
+        {
+            moveDistance = moveSpeed * Time.deltaTime;
+        }
         // transform.Translate를 사용하여 게임 오브젝트의 위치를 이동시킵니다.
         transform.Translate(movement * moveDistance);
 
@@ -36,11 +42,19 @@ public class PlayerMovement : MonoBehaviour
         if (horizontalInput < 0)
         {
             spriteRenderer.flipX = true;
+            if (GetComponent<Player>().isPet == true)
+            {
+                GetComponentInChildren<SpriteRenderer>().flipX = true;
+            }
         }
         // 오른쪽으로 움직일 때 스프라이트 X 축 반전 해제
         else if (horizontalInput > 0)
         {
             spriteRenderer.flipX = false;
+            if (GetComponent<Player>().isPet == true)
+            {
+                GetComponentInChildren<SpriteRenderer>().flipX = false;
+            }
         }
     }
 }
