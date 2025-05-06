@@ -18,6 +18,7 @@ public class Player : MonoBehaviour
                     }
                 case "1":
                     {
+                        SceneManager.LoadScene("MiniGame2");
                         break;
                     }
                 case "2":
