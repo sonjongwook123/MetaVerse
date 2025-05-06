@@ -27,5 +27,11 @@ public class Player : MonoBehaviour
                     }
             }
         }
+
+        if (other.CompareTag("Npc"))
+        {
+            other.GetComponent<Npc>().Talk();
+        }
     }
+
 }
