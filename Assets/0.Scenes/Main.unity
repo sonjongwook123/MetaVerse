@@ -350,7 +350,7 @@ GameObject:
   - component: {fileID: 452621573}
   - component: {fileID: 452621572}
   m_Layer: 0
-  m_Name: miniGameColider1
+  m_Name: 0
   m_TagString: Gate
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -742,7 +742,7 @@ GameObject:
   - component: {fileID: 857991977}
   - component: {fileID: 857991978}
   m_Layer: 0
-  m_Name: miniGameColider3
+  m_Name: 2
   m_TagString: Gate
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10930,7 +10930,7 @@ GameObject:
   - component: {fileID: 1638612041}
   - component: {fileID: 1638612042}
   m_Layer: 0
-  m_Name: miniGameColider2
+  m_Name: 1
   m_TagString: Gate
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
