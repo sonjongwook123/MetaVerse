@@ -1500,6 +1500,7 @@ GameObject:
   - component: {fileID: 856601671}
   - component: {fileID: 856601673}
   - component: {fileID: 856601674}
+  - component: {fileID: 856601675}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1679,6 +1680,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed5613d36cd191e40936b4c8419111a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pet: {fileID: 0}
+  isPet: 0
+  petPrefab: {fileID: 0}
 --- !u!114 &856601674
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1692,6 +1696,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
+--- !u!114 &856601675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 856601667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 1
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &948290354
 GameObject:
   m_ObjectHideFlags: 0
@@ -35979,6 +36005,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2111580803}
   - component: {fileID: 2111580804}
+  - component: {fileID: 2111580805}
+  - component: {fileID: 2111580806}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -36021,6 +36049,41 @@ MonoBehaviour:
   Score: {fileID: 440771824}
   ScoreList: {fileID: 323999952}
   scorePanel: {fileID: 1013087904}
+--- !u!114 &2111580805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2111580801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a3b508004c07904ca0899d0d430e3fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roomNumber: 1
+--- !u!114 &2111580806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2111580801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 2
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

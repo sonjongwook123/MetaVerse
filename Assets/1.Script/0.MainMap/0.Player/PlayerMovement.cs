@@ -1,6 +1,8 @@
+using Photon.Pun;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+[RequireComponent(typeof(PhotonView))]
+public class PlayerMovement : MonoBehaviourPunCallbacks
 {
     public float moveSpeed = 5f; // 이동 속도 (Inspector 창에서 조절 가능)
     private SpriteRenderer spriteRenderer; // SpriteRenderer 컴포넌트
@@ -15,46 +17,52 @@ public class PlayerMovement : MonoBehaviour
             Debug.LogError("SpriteRenderer component not found on this GameObject!");
             enabled = false;
         }
+
+        if (!photonView.IsMine)
+        {
+            enabled = false;
+        }
     }
 
     void Update()
     {
-        // 수평(Horizontal) 및 수직(Vertical) 입력 값을 받습니다.
-        float horizontalInput = Input.GetAxisRaw("Horizontal");
-        float verticalInput = Input.GetAxisRaw("Vertical");
+        if (photonView.IsMine)
+        {
+            float horizontalInput = Input.GetAxisRaw("Horizontal");
+            float verticalInput = Input.GetAxisRaw("Vertical");
 
-        // 이동 방향 벡터를 생성합니다.
-        Vector3 movement = new Vector3(horizontalInput, verticalInput, 0f).normalized;
-        float moveDistance = 0;
-        // 매 프레임 이동할 거리를 계산합니다.
-        if (GetComponent<Player>().isPet == true)
-        {
-            moveDistance = moveSpeed * 2 * Time.deltaTime;
-        }
-        else
-        {
-            moveDistance = moveSpeed * Time.deltaTime;
-        }
-        // transform.Translate를 사용하여 게임 오브젝트의 위치를 이동시킵니다.
-        transform.Translate(movement * moveDistance);
+            Vector3 movement = new Vector3(horizontalInput, verticalInput, 0f).normalized;
+            float moveDistance = 0;
 
-        // 왼쪽으로 움직일 때 스프라이트 X 축 반전
-        if (horizontalInput < 0)
-        {
-            spriteRenderer.flipX = true;
-            if (GetComponent<Player>().isPet == true)
+            if (GetComponent<Player>() != null && GetComponent<Player>().isPet == true)
             {
-                GetComponentInChildren<SpriteRenderer>().flipX = true;
+                moveDistance = moveSpeed * 2 * Time.deltaTime;
             }
-        }
-        // 오른쪽으로 움직일 때 스프라이트 X 축 반전 해제
-        else if (horizontalInput > 0)
-        {
-            spriteRenderer.flipX = false;
-            if (GetComponent<Player>().isPet == true)
+            else
             {
-                GetComponentInChildren<SpriteRenderer>().flipX = false;
+                moveDistance = moveSpeed * Time.deltaTime;
             }
+            transform.Translate(movement * moveDistance);
+
+            photonView.RPC("SetFlipXRPC", RpcTarget.All, horizontalInput < 0, GetComponent<Player>().isPet == true);
+            photonView.RPC("UpdatePositionRPC", RpcTarget.Others, transform.position);
         }
     }
+
+    [PunRPC]
+    void SetFlipXRPC(bool flipX, bool flipPetX)
+    {
+        spriteRenderer.flipX = flipX;
+        if (GetComponent<Player>() != null && GetComponent<Player>().isPet == true && GetComponentInChildren<SpriteRenderer>() != null)
+        {
+            GetComponentInChildren<SpriteRenderer>().flipX = flipPetX;
+        }
+    }
+
+    [PunRPC]
+    void UpdatePositionRPC(Vector3 newPosition)
+    {
+        transform.position = newPosition;
+    }
+
 }

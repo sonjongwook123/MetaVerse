@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Player : MonoBehaviour
+[RequireComponent(typeof(PhotonView))]
+public class Player : MonoBehaviourPunCallbacks
 {
     public GameObject pet;
     public bool isPet;
@@ -11,30 +13,38 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        isPet = false;
-        pet = null;
+        if (photonView.IsMine)
+        {
+            isPet = false;
+            pet = null;
+        }
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Gate"))
+        if (photonView.IsMine)
         {
-            switch (other.name)
+            if (other.CompareTag("Gate"))
             {
-                case "0":
-                    {
-                        SceneManager.LoadScene("MiniGame1");
-                        break;
-                    }
-                case "1":
-                    {
-                        SceneManager.LoadScene("MiniGame2");
-                        break;
-                    }
-                case "2":
-                    {
-                        break;
-                    }
+                switch (other.name)
+                {
+                    case "0":
+                        {
+                            PhotonNetwork.LeaveRoom();
+                            SceneManager.LoadScene("MiniGame1");
+                            break;
+                        }
+                    case "1":
+                        {
+                            PhotonNetwork.LeaveRoom();
+                            SceneManager.LoadScene("MiniGame2");
+                            break;
+                        }
+                    case "2":
+                        {
+                            break;
+                        }
+                }
             }
         }
 
@@ -54,21 +64,53 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void TogglePet()
+
+    [PunRPC]
+    public void TogglePetRPC()
     {
-        if (isPet == false)
+        isPet = !isPet;
+        if (isPet)
         {
-            isPet = true;
-            pet = Instantiate(petPrefab, transform.position + new Vector3(0, -1f, 0), Quaternion.identity, transform).gameObject;
+            if (photonView.IsMine)
+            {
+                pet = Instantiate(petPrefab, transform.position + new Vector3(0, -1f, 0), Quaternion.identity, transform).gameObject;
+            }
         }
         else
         {
-            isPet = false;
-            if (pet != null)
+            if (photonView.IsMine && pet != null)
             {
                 Destroy(pet);
                 pet = null;
             }
+        }
+    }
+
+    public void RequestTogglePet()
+    {
+        photonView.RPC("TogglePetRPC", RpcTarget.All);
+    }
+
+    public override void OnJoinedRoom()
+    {
+        foreach (Photon.Realtime.Player otherPlayer in PhotonNetwork.PlayerListOthers)
+        {
+            photonView.RPC("RequestOtherPlayerPetStateAndToggleRPC", otherPlayer);
+        }
+    }
+
+    [PunRPC]
+    void RequestOtherPlayerPetStateAndToggleRPC()
+    {
+        photonView.RPC("HandleOtherPlayerPetToggleRPC", RpcTarget.All, photonView.ViewID, isPet);
+    }
+
+    [PunRPC]
+    void HandleOtherPlayerPetToggleRPC(int playerViewID, bool otherPlayerHasPet)
+    {
+        if (photonView.IsMine && playerViewID != photonView.ViewID)
+        {
+            photonView.RPC("TogglePetRPC", RpcTarget.All);
         }
     }
 

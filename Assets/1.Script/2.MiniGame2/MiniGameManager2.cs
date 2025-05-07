@@ -2,11 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class MiniGameManager2 : MonoBehaviour
+[RequireComponent(typeof(PhotonView))]
+public class MiniGameManager2 : MonoBehaviourPunCallbacks
 {
     public GameObject Player;
     public bool isGameOver;
@@ -147,6 +149,7 @@ public class MiniGameManager2 : MonoBehaviour
 
     public void GoBackToMain()
     {
+        PhotonNetwork.LeaveRoom();
         SceneManager.LoadScene("Main");
     }
 
